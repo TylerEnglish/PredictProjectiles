@@ -368,9 +368,7 @@ class Game:
             'player_health': self.player.health,
             'objects': [(obj.position, obj.velocity) for obj in self.falling_objects],
         }
-        return state
-    
-        
+        return state      
 
 class Agent:
     def __init__(self, state_size, action_size, model, markov_chain):
@@ -400,13 +398,11 @@ class Agent:
             return random.randrange(self.action_size)
 
 
-# Initializing game components
-if __name__ == "__main__":
+def main_mc(training_mode,num_episodes):
     # Define game and DQN parameters
     state_size = 4
     action_size = 3
     batch_size = 64
-    num_episodes = 5
 
     # Initialize DQN model and agent
     model = DQN(state_size, action_size)
@@ -424,7 +420,6 @@ if __name__ == "__main__":
     physics = Physics()
     collision_manager = CollisionManager()
     player = Player(PLAYER_INITIAL_HEALTH)
-    training_mode = False  # Set to False to play with the trained model
 
     if not training_mode:
         if os.path.exists(model_path):
@@ -478,5 +473,13 @@ if __name__ == "__main__":
 
                 # Update the game
                 game.run()
+
+                break
         else:
             print("No trained model found, please check the path or train the model first.")
+
+
+# Initializing game components
+if __name__ == "__main__":
+    main_mc(True, 50)
+    main_mc(False, 0)

@@ -277,10 +277,14 @@ class Game:
 
         pygame.quit()
 
-# Initializing the game components and starting the game loop
-if __name__ == "__main__":
+def main_game():
     physics = Physics()
     collision_manager = CollisionManager()
     player = Player(PLAYER_INITIAL_HEALTH)
     game = Game(physics, collision_manager, player)
     game.run()
+
+
+# Initializing the game components and starting the game loop
+if __name__ == "__main__":
+    main_game()

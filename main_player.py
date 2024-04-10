@@ -1,28 +1,28 @@
 import torch
-from Game.PlayerSection.basic import *
+from Game.PlayerSection.basic import main_basic
+from Game.PlayerSection.player_mc import main_mc
+from Game.PlayerSection.player_mcmc import main_mcmc
+from Game.player import main_game
 
 
-def run_game(agent, model, model_path, num_episodes, training_mode):
-    physics = Physics()
-    collision_manager = CollisionManager()
-    player = Player(PLAYER_INITIAL_HEALTH)
+user_choice = input("Do you want to play the game or have AI? (Enter 'play' or 'AI'): ").lower()
 
-    if training_mode:
-        for i in range(num_episodes):
-            print(f'Episode num {i+1}/{num_episodes}')
-            game = Game(physics, collision_manager, player, agent, training_mode, 60)
-            game.run()
-
-        # Save the trained model if in training mode
-        torch.save(model.state_dict(), model_path)
-        print(f"Model saved successfully at {model_path}")
+if user_choice == "play":
+    main_game()
+elif user_choice == "ai":
+    user_choice = input("Do you want to Train or not? Yes/No:  ").lower()
+    if user_choice == 'yes':
+        main_basic(True, 50)
+        main_mc(True, 50)
+        main_mcmc(True, 50)
     else:
-        game = Game(physics, collision_manager, player, agent, training_mode, 6000)
-        game.run()
+        print("Basic model running")
+        main_basic(False, 0)
 
-state_size = 4
-action_size = 3
-model = DQN(state_size, action_size)
-agent = Agent(state_size, action_size, model)
-model_path = 'data/models/trained_model.pth'
-run_game(agent, model, model_path, 0, False)
+        print("MC model running")
+        main_mc(False, 0)
+
+        print("MCMC model runnig")
+        main_mcmc(False, 0)
+else:
+    print("Invalid choice. Please enter 'play' or 'AI'.")
